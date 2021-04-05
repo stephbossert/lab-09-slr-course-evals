@@ -11,6 +11,7 @@ output: github_document
 library(tidyverse) 
 library(tidymodels)
 library(openintro)
+library(ggplot2)
 ?evals
 view(evals)
 ```
@@ -30,7 +31,13 @@ summary(evals$score)
 ```
 
 ### Exercise 2
+There is a direct, positive relationship between a professor's beuty score and their evalution score... interesting. 
+```{r score and bty_avg}
+ggplot(evals, aes(x=score, y=bty_avg)) + 
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm, se=FALSE, linetype="solid",
+             color="red")
 
-...
+```
 
-Add exercise headings as needed.
+
