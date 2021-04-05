@@ -1,7 +1,7 @@
 ---
 title: "Lab 09 - Grading the professor, Pt. 1"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Steph Bossert"
+date: "5 april 2021"
 output: github_document
 ---
 
@@ -11,14 +11,23 @@ output: github_document
 library(tidyverse) 
 library(tidymodels)
 library(openintro)
+?evals
+view(evals)
 ```
 
 ### Exercise 1
+Positively skewed, mean = 4.18, max = 5, 
+Students tend to give positive evaluations for their professors as the data is positively skewed.
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+
+```{r score}
+evals2 <- ggplot(evals, aes(x = score))
+evals2 + geom_histogram(bins = 30, color = "white", fill = "blue") +
+  geom_vline(aes(xintercept = mean(score)), 
+             linetype = "dashed", size = 0.6)
+summary(evals$score)
+
+```
 
 ### Exercise 2
 
