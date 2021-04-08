@@ -39,5 +39,92 @@ ggplot(evals, aes(x=score, y=bty_avg)) +
              color="red")
 
 ```
+###Exercise 3
+Jitter handles the overplotting of data, adds random variation 
+```{r jitter}
+ggplot(evals, aes(x=score, y=bty_avg)) + 
+  geom_point(shape=18, color="blue")+
+  geom_jitter()
+
+ggplot(evals, aes(x=score, y=bty_avg)) + 
+  geom_point(shape=18, color="blue")+
+  geom_jitter(aes(colour = gender))
+
+```
+### Exercise 4
+score = 3.88 + .07(bty_avg)
+```{r regression}
+m_bty = lm(score~bty_avg, data = evals) #Create the linear regression
+summary(m_bty)
+ggplot(evals, aes(x=score, y=bty_avg)) + 
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm, se=FALSE, linetype="solid",
+             color="orange") +
+  geom_jitter(aes(colour = gender))
+
+```
+###Exercise 5
+```{r}
+m_bty = lm(score~bty_avg, data = evals)
+ggplot(evals, aes(x=score, y=bty_avg)) + 
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm, se=FALSE, linetype="solid",
+             color="yellow") +
+  geom_jitter() 
+ 
+```
+###Exercise 6
+Slope = .07, small but direction associated between average beauty score and score
+
+###Exercise 7
+It's positive and fairly large, which makes sense given the positive skew of the distribution of scores
+
+###Exercise 8
+R squared = 0.04, so beauty rating accounts for 4% of the variance in average professor evaluation score. 
+
+###Exercise 9/10
+```{r new regression}
+m_gen = lm(score~gender, data = evals) #Create the linear regression
+summary(m_gen)
+###y= .14(x) + 4.09
+###males: .14(0) + 4/09
+###females: y= .141(1) + 4.09
+```
 
 
+###Exercise 11
+```{r another regression}
+m_rank = lm(score~rank, data = evals) #Create the linear regression
+summary(m_rank)
+###y= 4.28 -.13(X1) + -.15(X2)
+###interpret: zero on both scores means a score of 4.28, controlling for rank tenure track, a decrease in -.14 for the rank tenure position 
+```
+
+
+####Exercise 12 & 13
+```{r ranke_level}
+rank_evals <- evals%>%
+  mutate(rank_relevel = case_when(rank== "tenure track" ~ 0,
+                          rank== "teaching" ~ 1,
+                          rank== "tenured" ~ 2))
+m_rank_relevel<- lm( score~ rank_relevel, data = rank_evals) #Create the linear regression
+summary(m_rank_relevel)
+```
+###13 Model: Y = 4.20 - .02(X)
+A teacher who is on the tenure track has a rank of 4.20, then a teacher who is "teaching" decreases by -.02 and then a teacher who is tenured decreases by -.04
+R square = .001
+
+###Exercise 14
+```{r tenure1}
+tenure_eligible_evals<- evals%>% 
+  mutate(Tenure_eligible = if_else(rank == "teaching", "No", "Yes"))
+```
+
+###Exercise 15
+```{r tenure2}
+m_tenure_eligible= lm( score~ Tenure_eligible, data = tenure_eligible_evals) #Create the linear regression
+summary(m_tenure_eligible)
+```
+### Y = 4.28 -1.4(X)
+###for teachers who are not tenure eligible: Y= 4.28 -(1.4)(0) , their score = 4.28, for those that are- Y= 4.28 -(1.4)(1)
+###R square = .0015
